@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sidebar Anything</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;500&display=swap">
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-width: 340px;
+      background: #f4f6fa;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .popup-container {
+      max-width: 370px;
+      margin: 0 auto;
+      padding: 18px 14px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 16px 14px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .section-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #1976d2;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+    input[type="text"], input[type="url"] {
+      flex: 1;
+      font-size: 1em;
+      padding: 9px 12px;
+      border-radius: 7px;
+      border: 1px solid #cfd8dc;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    input:focus {
+      border-color: #1976d2;
+      background: #fff;
+    }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 16px;
+      font-size: 1em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-btn:hover {
+      background: #1256a3;
+    }
+    .feedback {
+      min-height: 18px;
+      color: #d93025;
+      font-size: 0.97em;
+      margin-bottom: 2px;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .feedback.visible {
+      opacity: 1;
+    }
+    .entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-top: 2px;
+    }
+    .entry-card {
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border-radius: 7px;
+      padding: 8px 10px;
+      gap: 10px;
+      border: 1px solid #e3e7ed;
+      transition: box-shadow 0.2s, border 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .entry-card.selected {
+      border: 1.5px solid #1976d2;
+      background: #e3f0fd;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    }
+    .entry-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .entry-name {
+      font-weight: 500;
+      font-size: 1em;
+      color: #222;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .entry-url {
+      font-size: 0.93em;
+      color: #607d8b;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .entry-actions {
+      display: flex;
+      gap: 2px;
+    }
+    .entry-actions button {
+      background: none;
+      border: none;
+      color: #1976d2;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .entry-actions button:hover {
+      background: #e3f0fd;
+      color: #d93025;
+    }
+    .open-btn {
+      margin-top: 8px;
+      width: 100%;
+      background: #43a047;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 0;
+      font-size: 1.08em;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background 0.2s;
+    }
+    .open-btn:hover {
+      background: #2e7031;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #181a1b; color: #f3f3f3; }
+      .section, .popup-container { background: #23272a; color: #f3f3f3; }
+      .entry-card { background: #23272a; border-color: #333; }
+      .entry-card.selected { background: #1a237e; border-color: #90caf9; }
+      .open-btn { background: #90caf9; color: #222; }
+      .open-btn:hover { background: #1976d2; color: #fff; }
+      .add-btn { background: #90caf9; color: #222; }
+      .add-btn:hover { background: #1976d2; color: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-container">
+    <div class="section">
+      <div class="section-title"><span class="material-symbols-outlined">add_circle</span>Add or Edit Sidebar Entry</div>
+      <div class="feedback" id="feedback"></div>
+      <div class="input-group">
+        <input id="name" type="text" placeholder="Entry Name" autocomplete="off" />
+        <input id="url" type="url" placeholder="https://example.com" autocomplete="off" />
+        <button id="add" class="add-btn" title="Add Entry">
+          <span class="material-symbols-outlined">save</span>
+          <span id="addBtnText">Add Entry</span>
+        </button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span class="material-symbols-outlined">list</span>Saved Sidebars</div>
+      <div class="entries-list" id="entriesList"></div>
+      <button id="open" class="open-btn" title="Open in Sidebar">
+        <span class="material-symbols-outlined">side_navigation</span>
+        Open Selected in Sidebar
+      </button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

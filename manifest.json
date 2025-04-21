@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Sidebar Anything",
+  "version": "1.0",
+  "description": "Open any website in a sidebar. Save and switch between multiple sidebar entries.",
+  "permissions": ["storage", "sidePanel", "scripting", "tabs", "declarativeNetRequest"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html"},
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html"
+}
