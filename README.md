@@ -95,17 +95,17 @@ Pre-configured with the most popular AI tools for instant productivity:
 
 ```mermaid
 graph TB
-    A[SidebarAnything] --> B[✅ Universal Site Support]
-    A --> C[✅ Advanced Layouts]
-    A --> D[✅ AI-First Design]
-    A --> E[✅ Modern UI/UX]
-    A --> F[✅ Zero Performance Impact]
+    A["SidebarAnything"] --> B["Universal Site Support"]
+    A --> C["Advanced Layouts"]
+    A --> D["AI-First Design"]
+    A --> E["Modern UI/UX"]
+    A --> F["Zero Performance Impact"]
 
-    G[Other Extensions] --> H[❌ Limited Site Support]
-    G --> I[❌ Basic Layouts Only]
-    G --> J[❌ Generic Design]
-    G --> K[❌ Outdated Interface]
-    G --> L[❌ Resource Heavy]
+    G["Other Extensions"] --> H["Limited Site Support"]
+    G --> I["Basic Layouts Only"]
+    G --> J["Generic Design"]
+    G --> K["Outdated Interface"]
+    G --> L["Resource Heavy"]
 
     style A fill:#4F46E5,stroke:#312E81,stroke-width:3px,color:#fff
     style G fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff
