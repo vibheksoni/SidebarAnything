@@ -6,6 +6,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
    * @param {function} sendResponse - The function to send the response back to the extension.
    */
   if (request.action === "extractContent") {
+    /**
+     * Extracts the content of the page.
+     */
     const pageContent = {
       title: document.title,
       content: document.documentElement.outerHTML,
@@ -36,7 +39,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     cursor: auto !important;
                 }
                 
-                /* Target common markdown renderers */
                 .markdown-body, .markdown-content, .md-content, 
                 [data-testid="renderedMarkdown"], .rendered-markdown,
                 .markdown, .markdown-renderer, article, .article-content,
@@ -49,7 +51,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     pointer-events: auto !important;
                 }
                 
-                /* Remove overlay elements that might block selection */
                 [class*="overlay"], [class*="Overlay"], 
                 [class*="blocker"], [class*="Blocker"],
                 [class*="copy-protection"], [class*="CopyProtection"] {

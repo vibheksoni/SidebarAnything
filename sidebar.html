@@ -1,192 +1,466 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="h-full">
+
 <head>
-  <title>Sidebar Viewer</title>
+  <title>Sidebar Anything</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body, html { margin: 0; padding: 0; height: 100%; background: var(--bg, #f9f9f9); color: var(--fg, #222); }
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px 6px 10px;
-      background: #f3f3f3;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .sidebar-header select {
-      flex: 1;
-      font-size: 1em;
-      padding: 4px 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .sidebar-header button {
-      background: #0078d4;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 4px 10px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .sidebar-header button:hover { background: #005fa3; }
-    .sidebar-title {
-      font-weight: bold;
-      font-size: 1.08em;
-      margin-right: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 120px;
-    }    iframe { border: none; width: 100%; height: calc(100vh - 44px); }
-    .error-message {
-      display: none;
-      height: calc(100vh - 44px);
-      width: 100%;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--fg);
-      background: var(--bg);
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .error-message p {
-      margin: 8px 0;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-    .error-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 16px;
-    }
-    .error-message button {
-      background: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-    .error-message button:hover {
-      background: #3367d6;
-    }
-    /* Reader View Styles */
-    #readerContainer {
-      display: none;
-      height: calc(100vh - 44px);
-      width: 100%;
-      overflow-y: auto;
-      padding: 15px;
-      box-sizing: border-box;
-      background: var(--bg);
-      color: var(--fg);
-    }
-    .reader-header {
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-    .reader-header h1 {
-      margin: 10px 0;
-      font-size: 20px;
-      line-height: 1.3;
-    }
-    .reader-badge {
-      display: inline-block;
-      background: #4285f4;
-      color: white;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-    .reader-source {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-top: 10px;
-      word-break: break-all;
-    }
-    .reader-source a {
-      color: #4285f4;
-      text-decoration: none;
-    }
-    .reader-content {
-      font-size: 16px;
-      line-height: 1.6;
-    }
-    .reader-content img {
-      max-width: 100%;
-      height: auto;
-      margin: 10px 0;
-    }
-    .reader-footer {
-      margin-top: 30px;
-      padding-top: 15px;
-      border-top: 1px solid rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    /* Loading Spinner */
-    .loading-spinner {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      margin: 20px auto;
-      border: 3px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      border-top-color: #4285f4;
-      animation: spin 1s ease-in-out infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    @media (prefers-color-scheme: dark) {
-      body, html { --bg: #181a1b; --fg: #f3f3f3; background: var(--bg); color: var(--fg); }
-      .sidebar-header { background: #23272a; border-bottom: 1px solid #333; }
-      .sidebar-header select { background: #23272a; color: #f3f3f3; border-color: #333; }
-      .sidebar-header button { background: #005fa3; }
-      .sidebar-header button:hover { background: #003e6b; }
-      .error-message button {
-        background: #8ab4f8;
-        color: #202124;
-      }
-      .error-message button:hover {
-        background: #77a7f6;
-      }
-    }
-  </style>
-  <!-- Add Material Symbols font for icons -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;500&display=swap">
+  <link rel="stylesheet" href="dist/output.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;500;600&display=swap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
-<body>  
-  <div class="sidebar-header">
-    <span class="sidebar-title" id="sidebarTitle"></span>
-    <select id="sidebarEntries"></select>
-    <button id="copyTextBtn" title="Copy Selected Text">
-      <span class="material-symbols-outlined">content_copy</span>
-    </button>
-    <button id="reloadBtn" title="Reload">
-      <span class="material-symbols-outlined">refresh</span>
-    </button>
-    <button id="settingsBtn" title="Settings">
-      <span class="material-symbols-outlined">settings</span>
-    </button>
+
+<body class="font-inter h-full bg-gray-50 dark:bg-gray-900 transition-all duration-300">
+
+  <header class="sticky top-0 z-50 glass-effect border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center justify-between px-4 py-3">
+
+      <div class="flex items-center space-x-3 flex-1 min-w-0">
+        <div
+          class="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white text-sm">side_navigation</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h1 id="sidebarTitle" class="text-sm font-semibold text-gray-900 dark:text-white truncate">Sidebar Anything</h1>
+          <select id="siteSelector"
+            class="text-xs bg-transparent border-none text-gray-600 dark:text-gray-400 focus:outline-none cursor-pointer max-w-full">
+            <option value="">Select a site...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 mx-4">
+        <div class="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+          <button id="singleViewBtn"
+            class="layout-btn px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 bg-blue-500 text-white"
+            data-layout="single">
+            <span class="material-symbols-outlined text-sm">crop_portrait</span>
+          </button>
+          <button id="splitViewBtn"
+            class="layout-btn px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+            data-layout="split-2">
+            <span class="material-symbols-outlined text-sm">view_column</span>
+          </button>
+          <button id="quadViewBtn"
+            class="layout-btn px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+            data-layout="split-4">
+            <span class="material-symbols-outlined text-sm">grid_view</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <button id="themeToggleBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          title="Change Theme">
+          <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 hover:text-indigo-500 text-lg">palette</span>
+        </button>
+        <button id="copyTextBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          title="Copy Selected Text">
+          <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 text-lg">content_copy</span>
+        </button>
+        <button id="reloadBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          title="Reload">
+          <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 text-lg">refresh</span>
+        </button>
+        <button id="settingsBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          title="Settings">
+          <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 text-lg">settings</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="tabsContainer" class="hidden border-t border-gray-200 dark:border-gray-700">
+      <div class="flex overflow-x-auto scrollbar-hide px-4 py-2 space-x-2" id="tabsList">
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 h-full relative">
+
+    <div id="loadingOverlay"
+      class="hidden absolute inset-0 bg-white dark:bg-gray-900 bg-opacity-90 flex items-center justify-center z-40">
+      <div class="text-center">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Loading site...</p>
+      </div>
+    </div>
+
+    <div id="errorMessage" class="hidden absolute inset-0 bg-white dark:bg-gray-900 flex items-center justify-center z-30">
+      <div class="text-center max-w-md mx-auto p-6">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+          <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">error</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Site Cannot Be Displayed</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">This site may have restrictions that prevent embedding.</p>
+        <div class="flex space-x-3 justify-center">
+          <button id="readerViewBtn"
+            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
+            Reader View
+          </button>
+          <button id="openInTabBtn"
+            class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            Open in Tab
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="readerContainer" class="hidden h-full overflow-y-auto bg-white dark:bg-gray-900">
+      <div class="max-w-4xl mx-auto px-6 py-8">
+        <div id="readerHeader" class="mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
+          <div
+            class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium mb-4">
+            <span class="material-symbols-outlined text-sm mr-2">auto_stories</span>
+            Reader View
+          </div>
+          <h1 id="readerTitle" class="text-2xl font-bold text-gray-900 dark:text-white mb-2"></h1>
+          <p id="readerSource" class="text-sm text-gray-600 dark:text-gray-400"></p>
+        </div>
+        <div id="readerContent" class="prose prose-gray dark:prose-invert max-w-none">
+        </div>
+        <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+          <button id="exitReaderBtn"
+            class="px-6 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            Exit Reader View
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="iframeContainer" class="h-full flex">
+
+      <div id="singleView" class="w-full h-full">
+        <iframe id="mainFrame" class="w-full h-full border-none" src="about:blank"
+          allow="clipboard-read; clipboard-write"></iframe>
+      </div>
+
+      <div id="splitView" class="hidden w-full h-full flex">
+        <div class="flex-1 h-full relative panel-container" data-panel="1">
+          <iframe id="frame1" class="w-full h-full border-none" src="about:blank"
+            allow="clipboard-read; clipboard-write"></iframe>
+
+          <div
+            class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+            <button
+              class="add-site-to-panel flex flex-col items-center space-y-3 p-8 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+              data-panel="1" aria-label="Add site to panel">
+              <span class="material-symbols-outlined text-teal-500 text-6xl hover:text-teal-600 transition-colors">add_circle</span>
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+            </button>
+          </div>
+
+          <div
+            class="panel-controls absolute top-2 right-2 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="reload" data-frame="frame1" title="Reload">
+              <span class="material-symbols-outlined text-xs">refresh</span>
+            </button>
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="popout" data-frame="frame1" title="Open in new window">
+              <span class="material-symbols-outlined text-xs">open_in_new</span>
+            </button>
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="close" data-frame="frame1" title="Close">
+              <span class="material-symbols-outlined text-xs text-red-500">close</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="resize-handle w-2 cursor-col-resize hover:bg-blue-500 transition-colors duration-200"></div>
+
+        <div class="flex-1 h-full relative panel-container" data-panel="2">
+          <iframe id="frame2" class="w-full h-full border-none" src="about:blank"
+            allow="clipboard-read; clipboard-write"></iframe>
+
+          <div
+            class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+            <button
+              class="add-site-to-panel flex flex-col items-center space-y-3 p-8 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+              data-panel="2" aria-label="Add site to panel">
+              <span class="material-symbols-outlined text-teal-500 text-6xl hover:text-teal-600 transition-colors">add_circle</span>
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+            </button>
+          </div>
+
+          <div
+            class="panel-controls absolute top-2 right-2 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="reload" data-frame="frame2" title="Reload">
+              <span class="material-symbols-outlined text-xs">refresh</span>
+            </button>
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="popout" data-frame="frame2" title="Open in new window">
+              <span class="material-symbols-outlined text-xs">open_in_new</span>
+            </button>
+            <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+              data-action="close" data-frame="frame2" title="Close">
+              <span class="material-symbols-outlined text-xs text-red-500">close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="quadView" class="hidden w-full h-full flex flex-col">
+        <div class="flex-1 flex">
+          <div
+            class="flex-1 h-full relative border-r border-b border-gray-200 dark:border-gray-700 panel-container"
+            data-panel="3">
+            <iframe id="frame3" class="w-full h-full border-none" src="about:blank"
+              allow="clipboard-read; clipboard-write"></iframe>
+
+            <div
+              class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+              <button
+                class="add-site-to-panel flex flex-col items-center space-y-2 p-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+                data-panel="3" aria-label="Add site to panel">
+                <span
+                  class="material-symbols-outlined text-teal-500 text-4xl hover:text-teal-600 transition-colors">add_circle</span>
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+              </button>
+            </div>
+
+            <div
+              class="panel-controls absolute top-1 right-1 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="reload" data-frame="frame3" title="Reload">
+                <span class="material-symbols-outlined text-xs">refresh</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="popout" data-frame="frame3" title="Open in new window">
+                <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="close" data-frame="frame3" title="Close">
+                <span class="material-symbols-outlined text-xs text-red-500">close</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="flex-1 h-full relative border-b border-gray-200 dark:border-gray-700 panel-container"
+            data-panel="4">
+            <iframe id="frame4" class="w-full h-full border-none" src="about:blank"
+              allow="clipboard-read; clipboard-write"></iframe>
+
+            <div
+              class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+              <button
+                class="add-site-to-panel flex flex-col items-center space-y-2 p-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+                data-panel="4" aria-label="Add site to panel">
+                <span
+                  class="material-symbols-outlined text-teal-500 text-4xl hover:text-teal-600 transition-colors">add_circle</span>
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+              </button>
+            </div>
+
+            <div
+              class="panel-controls absolute top-1 right-1 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="reload" data-frame="frame4" title="Reload">
+                <span class="material-symbols-outlined text-xs">refresh</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="popout" data-frame="frame4" title="Open in new window">
+                <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="close" data-frame="frame4" title="Close">
+                <span class="material-symbols-outlined text-xs text-red-500">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 flex">
+          <div
+            class="flex-1 h-full relative border-r border-gray-200 dark:border-gray-700 panel-container"
+            data-panel="5">
+            <iframe id="frame5" class="w-full h-full border-none" src="about:blank"
+              allow="clipboard-read; clipboard-write"></iframe>
+
+            <div
+              class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+              <button
+                class="add-site-to-panel flex flex-col items-center space-y-2 p-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+                data-panel="5" aria-label="Add site to panel">
+                <span
+                  class="material-symbols-outlined text-teal-500 text-4xl hover:text-teal-600 transition-colors">add_circle</span>
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+              </button>
+            </div>
+
+            <div
+              class="panel-controls absolute top-1 right-1 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="reload" data-frame="frame5" title="Reload">
+                <span class="material-symbols-outlined text-xs">refresh</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="popout" data-frame="frame5" title="Open in new window">
+                <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="close" data-frame="frame5" title="Close">
+                <span class="material-symbols-outlined text-xs text-red-500">close</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex-1 h-full relative panel-container" data-panel="6">
+            <iframe id="frame6" class="w-full h-full border-none" src="about:blank"
+              allow="clipboard-read; clipboard-write"></iframe>
+
+            <div
+              class="panel-empty absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600">
+              <button
+                class="add-site-to-panel flex flex-col items-center space-y-2 p-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-105"
+                data-panel="6" aria-label="Add site to panel">
+                <span
+                  class="material-symbols-outlined text-teal-500 text-4xl hover:text-teal-600 transition-colors">add_circle</span>
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Add Site</span>
+              </button>
+            </div>
+
+            <div
+              class="panel-controls absolute top-1 right-1 flex space-x-1 opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="reload" data-frame="frame6" title="Reload">
+                <span class="material-symbols-outlined text-xs">refresh</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="popout" data-frame="frame6" title="Open in new window">
+                <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </button>
+              <button class="frame-control p-1 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-action="close" data-frame="frame6" title="Close">
+                <span class="material-symbols-outlined text-xs text-red-500">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2">
   </div>
-  <iframe id="sidebarFrame" src="about:blank"></iframe>
+
+  <div id="siteSelectionModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0"
+      id="siteSelectionModalContent">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Add Site to Panel</h3>
+          <button id="closeSiteSelectionModal"
+            class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="material-symbols-outlined text-gray-500">close</span>
+          </button>
+        </div>
+
+        <div class="mb-4">
+          <input type="text" id="siteSearchInput"
+            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 transition-all duration-200"
+            placeholder="Search sites or enter URL...">
+        </div>
+
+        <div class="mb-6">
+          <button id="addCustomUrlBtn"
+            class="w-full px-4 py-3 border-2 border-dashed border-teal-300 dark:border-teal-600 rounded-xl text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all duration-200 flex items-center justify-center space-x-2 font-medium">
+            <span class="material-symbols-outlined">add_link</span>
+            <span>Add Custom URL</span>
+          </button>
+        </div>
+
+        <div class="max-h-64 overflow-y-auto space-y-2" id="sitesList">
+        </div>
+
+        <div id="sitesLoading" class="hidden text-center py-8">
+          <div class="loading-spinner mx-auto mb-4"></div>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Loading sites...</p>
+        </div>
+
+        <div id="sitesEmpty" class="hidden text-center py-8">
+          <span class="material-symbols-outlined text-gray-400 text-4xl mb-2 block">web</span>
+          <p class="text-sm text-gray-600 dark:text-gray-400">No sites found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="themeSelectionModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm transform transition-all duration-300 scale-95 opacity-0"
+      id="themeSelectionModalContent">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Choose Theme</h3>
+          <button id="closeThemeSelectionModal"
+            class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="material-symbols-outlined text-gray-500">close</span>
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          <button
+            class="theme-option w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500 transition-all duration-200 flex items-center space-x-4"
+            data-theme="light">
+            <div class="w-12 h-8 rounded-lg bg-white border border-gray-300 flex items-center justify-center">
+              <span class="material-symbols-outlined text-gray-600 text-sm">light_mode</span>
+            </div>
+            <div class="text-left">
+              <div class="font-medium text-gray-900 dark:text-white">Light</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Clean and bright</div>
+            </div>
+          </button>
+
+          <button
+            class="theme-option w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500 transition-all duration-200 flex items-center space-x-4"
+            data-theme="dark">
+            <div class="w-12 h-8 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-sm">dark_mode</span>
+            </div>
+            <div class="text-left">
+              <div class="font-medium text-gray-900 dark:text-white">Dark</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Easy on the eyes</div>
+            </div>
+          </button>
+
+          <button
+            class="theme-option w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500 transition-all duration-200 flex items-center space-x-4"
+            data-theme="auto">
+            <div
+              class="w-12 h-8 rounded-lg bg-gradient-to-r from-white to-gray-900 border border-gray-300 flex items-center justify-center">
+              <span class="material-symbols-outlined text-gray-600 text-sm">brightness_auto</span>
+            </div>
+            <div class="text-left">
+              <div class="font-medium text-gray-900 dark:text-white">Auto</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Follows system</div>
+            </div>
+          </button>
+
+          <button
+            class="theme-option w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-500 transition-all duration-200 flex items-center space-x-4"
+            data-theme="premium">
+            <div
+              class="w-12 h-8 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-sm">auto_awesome</span>
+            </div>
+            <div class="text-left">
+              <div class="font-medium text-gray-900 dark:text-white">Premium</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Gradient magic</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="sidebar.js"></script>
-<script>
-  document.getElementById('settingsBtn').onclick = () => {
-    if (chrome.runtime.openOptionsPage) {
-      chrome.runtime.openOptionsPage();
-    } else {
-      window.open('options.html', '_blank');
-    }
-  };
-</script>
 </body>
+
 </html>

@@ -1,0 +1,16 @@
+{
+  "name": "sidebar-anything",
+  "version": "1.0.0",
+  "description": "Open any website in a sidebar. Save and switch between multiple sidebar entries.",
+  "scripts": {
+    "build-css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "dev": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "keywords": ["browser-extension", "sidebar", "chrome-extension"],
+  "author": "Vibhek Soni",
+  "license": "MIT"
+} 

@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glass-effect {
+  /**
+   * Applies a glass effect to the element.
+   */
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  /**
+   * Applies a darker glass effect to the element when in dark mode.
+   */
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-bg {
+  /**
+   * Applies a gradient background to the element.
+   */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.premium-gradient {
+  /**
+   * Applies a premium gradient background to the element.
+   */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+.material-symbols-outlined {
+  /**
+   * Styles for Material Symbols Outlined.
+   */
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.group-card {
+  /**
+   * Applies transition to group card.
+   */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group-card:hover {
+  /**
+   * Applies hover effect to group card.
+   */
+  transform: translateY(-2px);
+}
+
+.site-item {
+  /**
+   * Applies transition to site item.
+   */
+  transition: all 0.2s ease-in-out;
+}
+
+.site-item:hover {
+  /**
+   * Applies hover effect to site item.
+   */
+  transform: translateX(4px);
+}
+
+.animate-fade-in {
+  /**
+   * Applies fade-in animation.
+   */
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-in {
+  /**
+   * Applies slide-in animation.
+   */
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-scale-in {
+  /**
+   * Applies scale-in animation.
+   */
+  animation: scaleIn 0.2s ease-out;
+}
+
+.animate-fade-out {
+  /**
+   * Applies fade-out animation.
+   */
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  /**
+   * Defines the fade-in animation.
+   */
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  /**
+   * Defines the slide-in animation.
+   */
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  /**
+   * Defines the scale-in animation.
+   */
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  /**
+   * Defines the fade-out animation.
+   */
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.resize-handle {
+  /**
+   * Styles for the resize handle.
+   */
+  cursor: col-resize;
+  background: linear-gradient(90deg, transparent 40%, rgba(156, 163, 175, 0.5) 50%, transparent 60%);
+  transition: background 0.2s;
+}
+
+.resize-handle:hover {
+  /**
+   * Styles for the resize handle on hover.
+   */
+  background: linear-gradient(90deg, transparent 30%, rgba(59, 130, 246, 0.8) 50%, transparent 70%);
+}
+
+.dark .resize-handle:hover {
+  /**
+   * Styles for the resize handle on hover in dark mode.
+   */
+  background: linear-gradient(90deg, transparent 30%, rgba(96, 165, 250, 0.8) 50%, transparent 70%);
+}
+
+.loading-spinner {
+  /**
+   * Styles for the loading spinner.
+   */
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  /**
+   * Defines the spin animation.
+   */
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.tab-active {
+  /**
+   * Styles for the active tab.
+   */
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.iframe-container {
+  /**
+   * Styles for the iframe container.
+   */
+  transition: all 0.3s ease-in-out;
+}
+
+.split-view-2 .iframe-container {
+  /**
+   * Styles for the iframe container in split-view-2.
+   */
+  width: 50%;
+}
+
+.split-view-4 .iframe-container {
+  /**
+   * Styles for the iframe container in split-view-4.
+   */
+  width: 50%;
+  height: 50%;
+}
+
+.scrollbar-hide {
+  /**
+   * Hides the scrollbar.
+   */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  /**
+   * Hides the scrollbar in webkit browsers.
+   */
+  display: none;
+}

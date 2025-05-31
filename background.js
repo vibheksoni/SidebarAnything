@@ -4,7 +4,9 @@ async function initializeExtension() {
    */
   try {
     await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error setting panel behavior:", error);
+  }
 
   chrome.runtime.onMessage.addListener(handleRuntimeMessage);
 
@@ -88,7 +90,12 @@ async function setupHeaderModificationRules() {
         },
       ],
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(
+      "Error setting up header modification rules:",
+      error
+    );
+  }
 }
 
 async function bypassFrameRestriction(url) {
