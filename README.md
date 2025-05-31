@@ -4,10 +4,10 @@
 
 ### *Transform your browser into a productivity powerhouse with instant access to any website in a sleek, customizable sidebar*
 
-<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-  <img src="assets/Sidebar-preview.PNG" alt="Sidebar Preview" width="300" />
-  <img src="assets/Multi-panel-preview.PNG" alt="Multi-panel Preview" width="300" />
-  <img src="assets/Settings-page-preview.PNG" alt="Settings Preview" width="300" />
+<div style="display: flex; overflow-x: auto; justify-content: center; gap: 20px; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+  <img src="assets/Sidebar-preview.PNG" alt="Sidebar Preview" width="250" height="150" />
+  <img src="assets/Multi-panel-preview.PNG" alt="Multi-panel Preview" width="250" height="150" />
+  <img src="assets/Settings-page-preview.PNG" alt="Settings Preview" width="250" height="150" />
 </div>
 
 [![GitHub release](https://img.shields.io/github/v/release/vibheksoni/SidebarAnything?style=for-the-badge&logo=github&color=4F46E5)](https://github.com/vibheksoni/SidebarAnything/releases)
